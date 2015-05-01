@@ -1,5 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.File;
+import java.util.Scanner;
 /**
  * Module containing utility methods.
  * 
@@ -27,6 +29,21 @@ public class FileUtil {
      * A description consists of 1 or more characters (generally, it’s a word phrase). <br>
      */
     public static void load(Dictionary dictionary, String filename) throws FileNotFoundException, IOException { 
-        // Implement this.
+        File file = new File(filename);
+        Scanner s = new Scanner(file);
+        while(s.hasNext()){
+			String[] entry = s.nextLine().split(" : ");
+			WordType wordType = WordType.toWordType(entry[0]);
+			if (entry.length>2){
+				Definition definition = new Definition(wordType, entry[2]);
+				dictionary.insert(entry[1], definition);
+			}
+			else{
+				dictionary.insert(entry[1], null);
+			}
+			
+		}
+        
+        
     }
 }

@@ -21,23 +21,68 @@ public class LPHashtable implements Dictionary
     
 
     private int hashFunction(String key) {
-        // Your hash function here.
-        return -1;
-    }
+		
+		int hashVal = 0;
+		for( int i = 0; i < key.length( ); i++){
+			hashVal = 37 * hashVal + key.charAt( i );
+		}
+		hashVal %= table.length;
+		if( hashVal < 0 ){
+			hashVal += table.length;
+		}
+		return hashVal;
+	}	
+		
     
-    
+    //incorrect search algorithm?
     public boolean containsWord(String word) {
-        // Implement this.
-        return false;
+        int key = hashFunction(word);
+        System.out.println(key);
+        
+        for (int i=0; i<entries; i++){
+			if (table[key+i] == null){
+				System.out.println(key+i + "= null");//
+				return false;
+			}
+			else if (table[key+i].getWord().equals(word)){
+				return true;
+			}
+		}
+		return false;
+        
     }
+    
     
     public List<Definition> getDefinitions(String word) {
-        // Implement this.
-        return null;
+        
+        int key = hashFunction(word);
+        for (int i=0; i<entries; i++){
+			if (table[key+i] == null){
+				
+				return null;
+			}
+			else if (table[key+i].getWord().equals(word)){
+				
+				return table[key+i].getDefinitions();
+			}
+		}
+		return null;
     }
     
     public void insert(String word, Definition definition) {        
-        // Implement this.
+        int key = hashFunction(word);
+        for (int i=0; i<entries+1; i++){
+			if (table[key+i] == null){
+				table[key+i] =new EntryImpl(word);
+				table[key+i].addDefinition(definition);
+				break;
+			}
+			else if (table[key+i].getWord().equals(word)){
+				table[key+i].addDefinition(definition);
+				break;
+			}
+		}
+		entries++;
     }
         
     public boolean isEmpty() { return entries == 0; }
