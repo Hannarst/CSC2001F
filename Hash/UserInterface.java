@@ -25,18 +25,19 @@ public class UserInterface {
             case 1:
                 dictionary = new LPHashtable(7481);
                 break;
-//             case 2:
-//                 dictionary = new QPHashtable(7481);
-//                 break;
-//             case 3:
-//                 dictionary = new SCHashtable(3739);
-//                 break;
+            case 2:
+                dictionary = new QPHashtable(7481);
+                break;
+            case 3:
+            //3739
+                dictionary = new SCHashtable(19);
+                break;
           default: 
                 System.out.println("Selection not recognised.");
                 System.exit(-1);
         }
         
-        FileUtil.load(dictionary, "lexicon.txt");
+        FileUtil.load(dictionary, "lexicon_aa.txt");
         
         System.out.println("Enter a word (or '#quit'):");
         String word = input.next().toLowerCase();

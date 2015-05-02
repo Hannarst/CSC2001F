@@ -1,13 +1,19 @@
 import java.util.*;
 
-public class EntryImpl implements Entry{
+public class ChainedEntryImpl implements ChainedEntry{
 	
 	ArrayList<Definition> definitions = new ArrayList<Definition>();
 	String word;
+	ChainedEntry next;
 	
 	
-	public EntryImpl(String word){
+	public ChainedEntryImpl(String word){
+		this(word, null);
+	}
+	
+	public ChainedEntryImpl(String word, ChainedEntryImpl next){
 		this.word = word;
+		this.next = next;
 	}
 	    
     /**
@@ -48,6 +54,14 @@ public class EntryImpl implements Entry{
 			definitions.add(definition);
 		}
 	}
+	
+	public ChainedEntry getNext(){
+		return next;
+	}
+	
+	public void setNext(ChainedEntry next){
+		this.next = next;
+	}
     
     /**
      * Determine whether this entry is for the given word.
@@ -60,3 +74,4 @@ public class EntryImpl implements Entry{
 		return word + ": " +definitions;
 	}
 }
+
