@@ -36,15 +36,20 @@ public class QPHashtable implements Dictionary
 		
     
     //incorrect search algorithm?
-    public boolean containsWord(String word) {
+	public boolean containsWord(String word) {
         int key = hashFunction(word);
-        System.out.println(key);
-        
-        for (int i=0; i<entries; i++){
-			if (table[key+i*i] == null){
+       
+        for (int i=0; i<table.length; i++){
+			int currentIndex = key+i*i;
+			
+			if (currentIndex >= table.length){
+				currentIndex -= table.length;
+			}  
+			
+			if (table[currentIndex] == null){
 				return false;
 			}
-			else if (table[key+i*i].getWord().equals(word)){
+			else if (table[currentIndex].getWord().equals(word)){
 				return true;
 			}
 		}
@@ -54,16 +59,18 @@ public class QPHashtable implements Dictionary
     
     
     public List<Definition> getDefinitions(String word) {
-        
         int key = hashFunction(word);
-        for (int i=0; i<entries; i++){
-			if (table[key+i*i] == null){
-				
+        for (int i=0; i<table.length; i++){
+			int currentIndex = key+i*i;
+			if (currentIndex >= table.length){
+				currentIndex -= table.length;
+			} 
+			if (table[currentIndex] == null){		
 				return null;
 			}
-			else if (table[key+i*i].getWord().equals(word)){
+			else if (table[currentIndex].getWord().equals(word)){
 				
-				return table[key+i*i].getDefinitions();
+				return table[currentIndex].getDefinitions();
 			}
 		}
 		return null;
@@ -71,17 +78,21 @@ public class QPHashtable implements Dictionary
     
     public void insert(String word, Definition definition) {        
         int key = hashFunction(word);
-        for (int i=0; i<entries+1; i++){
-			if (table[key+i*i] == null){
-				table[key+i*i] =new EntryImpl(word);
-				table[key+i*i].addDefinition(definition);
+        for (int i=0; i<table.length+1; i++){
+			int currentIndex = key+i*i;
+			if (currentIndex >= table.length){
+				currentIndex -= table.length;
+			} 
+			if (table[currentIndex] == null){
+				table[currentIndex] =new EntryImpl(word);
+				table[currentIndex].addDefinition(definition);
 				break;
 			}
-			else if (table[key+i*i].getWord().equals(word)){
-				table[key+i*i].addDefinition(definition);
+			else if (table[currentIndex].getWord().equals(word)){
+				table[currentIndex].addDefinition(definition);
 				break;
 			}
-			if (i==entries){
+			if (i>=table.length){
 				throw new IllegalStateException();
 			}
 		}
