@@ -30,14 +30,14 @@ public class UserInterface {
                 break;
             case 3:
             //3739
-                dictionary = new SCHashtable(19);
+                dictionary = new SCHashtable(3739);
                 break;
           default: 
                 System.out.println("Selection not recognised.");
                 System.exit(-1);
         }
         
-        FileUtil.load(dictionary, "lexicon_aa.txt");
+        FileUtil.load(dictionary, "lexicon.txt");
         
         System.out.println("Enter a word (or '#quit'):");
         String word = input.next().toLowerCase();

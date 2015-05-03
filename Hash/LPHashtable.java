@@ -36,15 +36,20 @@ public class LPHashtable implements Dictionary
     
     //incorrect search algorithm?
     public boolean containsWord(String word) {
-        int key = hashFunction(word);
-        System.out.println(key);
-        
-        for (int i=0; i<entries; i++){
-			if (table[key+i] == null){
-				System.out.println(key+i + "= null");//
+        int key = hashFunction(word);        
+        for (int i=key; i<table.length; i++){
+			if (table[i] == null){
 				return false;
 			}
-			else if (table[key+i].getWord().equals(word)){
+			else if (table[i].getWord().equals(word)){
+				return true;
+			}
+		}
+		for (int i=0; i<key;i++){
+			if (table[i] == null){
+				return false;
+			}
+			else if (table[i].getWord().equals(word)){
 				return true;
 			}
 		}
@@ -54,35 +59,57 @@ public class LPHashtable implements Dictionary
     
     
     public List<Definition> getDefinitions(String word) {
-        
+       // LPHashtable.debug_print(this);//
         int key = hashFunction(word);
-        for (int i=0; i<entries; i++){
-			if (table[key+i] == null){
-				
+        for (int i=0; i<table.length; i++){
+			int currentIndex = key+i;
+			if (currentIndex >= table.length){
+				currentIndex -= table.length;
+			} 
+			if (table[currentIndex] == null){		
 				return null;
 			}
-			else if (table[key+i].getWord().equals(word)){
+			else if (table[currentIndex].getWord().equals(word)){
 				
-				return table[key+i].getDefinitions();
+				return table[currentIndex].getDefinitions();
 			}
 		}
 		return null;
     }
     
-    public void insert(String word, Definition definition) {        
+    public void insert(String word, Definition definition) { 
+		       
         int key = hashFunction(word);
-        for (int i=0; i<entries+1; i++){
-			if (table[key+i] == null){
-				table[key+i] =new EntryImpl(word);
-				table[key+i].addDefinition(definition);
+        System.out.println("inserting: "+ word +" key: " + key);//
+
+
+        for (int i=0; i<table.length+1; i++){
+			int currentIndex = key+i;
+			if (currentIndex >= table.length){
+				System.out.println("looping");//
+				currentIndex -= table.length;
+			}
+			if (table[currentIndex] == null){
+				System.out.println("adding new entry");//
+				System.out.println("cuurent index: "+ currentIndex);//
+				System.out.println("key: " + key);//
+				System.out.println("i: " + i);//
+				table[currentIndex] =new EntryImpl(word);
+				table[currentIndex].addDefinition(definition);
+				entries++;
 				break;
 			}
-			else if (table[key+i].getWord().equals(word)){
-				table[key+i].addDefinition(definition);
+			else if (table[currentIndex].getWord().equals(word)){
+				System.out.println("adding new definition to old entry");//
+				table[currentIndex].addDefinition(definition);
 				break;
 			}
+			System.out.println(currentIndex+" unavailable");//
+			
 		}
-		entries++;
+		System.out.println("inserted");//
+		//LPHashtable.debug_print(this);
+
     }
         
     public boolean isEmpty() { return entries == 0; }
