@@ -55,7 +55,6 @@ public class SCHashtable implements Dictionary
     
     
     public List<Definition> getDefinitions(String word) {
-		SCHashtable.debug_print(this);//
         int key = hashFunction(word);
         if (table[key]!=null){
 			
@@ -76,32 +75,35 @@ public class SCHashtable implements Dictionary
     
     public void insert(String word, Definition definition) {        
         int key = hashFunction(word);
-        ChainedEntry entry = table[key];
+        ChainedEntry head = table[key];
 		
-		if (entry == null){
-			entry = new ChainedEntryImpl(word);
-			entry.addDefinition(definition);
-			table[key]=entry;
+		if (head == null){
+			head = new ChainedEntryImpl(word);
+			head.addDefinition(definition);
+			table[key]=head;
+			entries++;
 
 		}
 		else{
-			
-			while (entry!=null){
-				if (entry.getWord().equals(word)){
-					entry.addDefinition(definition);
+			ChainedEntry cell = head;
+			while (cell!=null){
+				if (cell.getWord().equals(word)){
+					cell.addDefinition(definition);
+					return;
+				}
+				
+				else if (cell.getNext()==null){
+					ChainedEntry newCell = new ChainedEntryImpl(word);
+					newCell.addDefinition(definition);
+					cell.setNext(newCell);
 					entries++;
 					return;
 				}
-				entry = entry.getNext();
+				
+				cell = cell.getNext();
 			}
-			
-			ChainedEntryImpl newEntry = new ChainedEntryImpl(word);
-			newEntry.addDefinition(definition);
-			newEntry.setNext(entry);
-			table[key]=newEntry;
+
 		}
-		
-		entries++;
     }
         
     public boolean isEmpty() { return entries == 0; }
@@ -125,14 +127,15 @@ public class SCHashtable implements Dictionary
     public static void debug_print(SCHashtable hashtable) {
         ChainedEntry[] table = hashtable.table;
         for(int i=0; i<table.length; i++) {
-			ChainedEntry entry = table[i];
-			if (entry==null){
-				System.out.println(i+ " : " + entry);
+			ChainedEntry head = table[i];
+			if (head==null){
+				System.out.println(i+ " : null");
 			}
 			else{
-				while(entry!=null){
-					System.out.println(i+ " : " + entry);
-					entry = entry.getNext();
+				ChainedEntry cell = head;
+				while(cell!=null){
+					System.out.println(i+ " : " + cell);
+					cell = cell.getNext();
 				}
 			}
         }
