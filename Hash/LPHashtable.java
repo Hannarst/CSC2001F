@@ -5,13 +5,16 @@ import java.util.List;
  * @author Stephan Jamieson 
  * @version 24/4/2015
  */
-public class LPHashtable implements Dictionary
-{
+public class LPHashtable implements Dictionary{
+	
     private final static int DEFAULT_SIZE = 50;
  
     private Entry[] table;
     private int entries;
- 
+	private int loadProbes;
+	private int searchProbes;
+	
+	
     public LPHashtable() { this(DEFAULT_SIZE); }
     
     public LPHashtable(int size) { 
@@ -55,28 +58,32 @@ public class LPHashtable implements Dictionary
     
     
     public List<Definition> getDefinitions(String word) {
+		
         int key = hashFunction(word);
-        for (int i=0; i<table.length; i++){
+        int i;
+        for (i=0; i<table.length; i++){
 			int currentIndex = key+i;
 			if (currentIndex >= table.length){
 				currentIndex -= table.length;
 			} 
-			if (table[currentIndex] == null){		
+			if (table[currentIndex] == null){
+				searchProbes += i;		
 				return null;
 			}
 			else if (table[currentIndex].getWord().equals(word)){
-				
+				searchProbes += i;
 				return table[currentIndex].getDefinitions();
 			}
 		}
+		searchProbes += i;
 		return null;
     }
     
     public void insert(String word, Definition definition) { 
 		       
         int key = hashFunction(word);
-
-        for (int i=0; i<table.length+1; i++){
+		int i;
+        for (i=0; i<table.length; i++){
 			int currentIndex = key+i;
 			if (currentIndex >= table.length){
 				currentIndex -= table.length;
@@ -94,8 +101,17 @@ public class LPHashtable implements Dictionary
 			}
 			
 		}
+		loadProbes += i;
+		
+		
 
     }
+    
+    int getLoadProbes(){return loadProbes;}
+    
+    int getSearchProbes(){return searchProbes;}
+    
+    void resetSearch(){searchProbes = 0;}
         
     public boolean isEmpty() { return entries == 0; }
     

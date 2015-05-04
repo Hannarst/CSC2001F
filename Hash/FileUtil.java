@@ -39,7 +39,7 @@ public class FileUtil {
 				dictionary.insert(entry[1], definition);
 			}
 			else{
-				dictionary.insert(entry[1], null);
+				dictionary.insert(entry[1].replace(" :", ""), null);
 			}
 			
 		}

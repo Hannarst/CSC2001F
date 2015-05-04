@@ -12,7 +12,9 @@ public class SCHashtable implements Dictionary
  
     private ChainedEntry[] table;
     private int entries;
- 
+    private int loadProbes;
+	private int searchProbes;
+	
     public SCHashtable() { this(DEFAULT_SIZE); }
     
     public SCHashtable(int size) { 
@@ -56,19 +58,24 @@ public class SCHashtable implements Dictionary
     
     public List<Definition> getDefinitions(String word) {
         int key = hashFunction(word);
+        int probes = 1;
         if (table[key]!=null){
 			
 			ChainedEntry entry = table[key];
 			while (entry!=null){
 				if (entry.getWord().equals(word)){
+					searchProbes += probes;
 					return entry.getDefinitions();
 				}
+				probes++;
 				entry = entry.getNext();
 
 			}
+			searchProbes += probes;
 			return null;
 		}
 		else{
+			searchProbes += probes;
 			return null;
         }		
     }
@@ -76,12 +83,14 @@ public class SCHashtable implements Dictionary
     public void insert(String word, Definition definition) {        
         int key = hashFunction(word);
         ChainedEntry head = table[key];
+		int probes = 1;
 		
 		if (head == null){
 			head = new ChainedEntryImpl(word);
 			head.addDefinition(definition);
 			table[key]=head;
 			entries++;
+			loadProbes+=probes;
 
 		}
 		else{
@@ -89,6 +98,7 @@ public class SCHashtable implements Dictionary
 			while (cell!=null){
 				if (cell.getWord().equals(word)){
 					cell.addDefinition(definition);
+					loadProbes += probes;
 					return;
 				}
 				
@@ -97,14 +107,21 @@ public class SCHashtable implements Dictionary
 					newCell.addDefinition(definition);
 					cell.setNext(newCell);
 					entries++;
+					loadProbes += probes;
 					return;
 				}
-				
+				probes++;
 				cell = cell.getNext();
 			}
 
 		}
     }
+    
+    int getLoadProbes(){return loadProbes;}
+    
+    int getSearchProbes(){return searchProbes;}
+    
+    void resetSearch(){searchProbes = 0;}
         
     public boolean isEmpty() { return entries == 0; }
     
