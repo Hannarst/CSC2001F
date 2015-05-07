@@ -65,7 +65,7 @@ public class QPHashtable implements Dictionary
         int i;
         for (i=0; i<table.length; i++){
 			int currentIndex = key+i*i;
-			if (currentIndex >= table.length){
+			while (currentIndex >= table.length){
 				currentIndex -= table.length;
 			} 
 			if (table[currentIndex] == null){
