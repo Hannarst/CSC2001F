@@ -1,0 +1,106 @@
+1) Measurements Data
+**********************************
+Calculating for load factor 0.5...
+**********************************
+
+***Loading Dictionaries***
+
+*Number of load probes:
+ LP: 2839
+ QP: 2297
+ SC: 5498
+*Percentage difference between loading probes:
+ QP and LP: -23.595994775794516
+ SC and LP: 48.363041105856674
+ SC and QP: 58.22117133503092
+
+***QP wins load!***
+
+***************************************
+***Creating 1000 random search tests***
+
+*Average number of search probes:
+ LP: 60
+ QP: 49
+ SC: 127
+*Percentage difference between:
+ QP and LP: -22.448979591836736
+ SC and LP: 52.75590551181102
+ SC and QP: 61.41732283464567
+
+***QP wins search!***
+
+
+**********************************
+Calculating for load factor 0.75...
+**********************************
+
+***Loading Dictionaries***
+
+*Number of load probes:
+ LP: 6771
+ QP: 4598
+ SC: 5754
+*Percentage difference between loading probes:
+ QP and LP: -47.25967812092214
+ SC and LP: -17.67466110531804
+ SC and QP: 20.090371915189433
+
+***QP wins load!***
+
+***************************************
+***Creating 1000 random search tests***
+
+*Average number of search probes:
+ LP: 188
+ QP: 111
+ SC: 138
+*Percentage difference between:
+ QP and LP: -69.36936936936937
+ SC and LP: -36.231884057971016
+ SC and QP: 19.565217391304348
+
+***QP wins search!***
+
+
+**********************************
+Calculating for load factor 1.0...
+**********************************
+
+***Loading Dictionaries***
+
+*Number of load probes:
+ LP: 202364
+ QP: 21834
+ SC: 6175
+*Percentage difference between loading probes:
+ QP and LP: -826.8297151232024
+ SC and LP: -3177.1497975708503
+ SC and QP: -253.58704453441297
+
+***SC wins load!***
+
+***************************************
+***Creating 1000 random search tests***
+
+*Average number of search probes:
+ LP: 23359
+ QP: 3368
+ SC: 152
+*Percentage difference between:
+ QP and LP: -593.5570071258908
+ SC and LP: -15267.763157894737
+ SC and QP: -2115.7894736842104
+
+***SC wins search!***
+
+
+2)How to Perform Test
+The class CompareDictionaries has a main method which executes all of the tests necessary. 
+
+3)Evaluation
+As seen in the data, for load factors 0.5 and 0.75, quadratic probing is the optimal, when considering time. For load factor 1, the fastest is sequential chaining. 
+
+In general, quadratic probing seems to be best, though it would be more prudent to find the exact (or at least a better approximation of) value at which sequential chaining overtakes quadratic probing in time efficiency. 
+
+The best combination of speed and efficient storage is still quadratic probing. A load factor of 0.75 means not much space is wasted, and it's faster than all the others at that point, so that seems to be the optimum position. Again, more testing would be required for higher certainty in these predictions, but all signs point to quadratic probing as being the optimum choice.
